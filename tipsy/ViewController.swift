@@ -30,6 +30,15 @@ class ViewController: UIViewController {
         //tipSelector.setTitle("40%", forSegmentAtIndex: 2);
         
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let intValue = defaults.integerForKey(SettingsViewController.DEFAULT_VALUE_KEY);
+        
+        tipSelector.selectedSegmentIndex = intValue;
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
