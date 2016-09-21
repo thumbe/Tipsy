@@ -17,40 +17,40 @@ class ViewController: UIViewController {
     @IBOutlet weak var tipSelector: UISegmentedControl!
     
     var existingTip: Double = 0;
-    var imageView: UIImageView = UIImageView(frame: CGRectMake(0, 20, 320, 320));
+    var imageView: UIImageView = UIImageView(frame: CGRect(x: 0, y: 20, width: 320, height: 320));
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         
-        let defaults = NSUserDefaults.standardUserDefaults()
+        let defaults = UserDefaults.standard
         
-         UIImageView(frame: CGRectMake(0, 20, 320, 320))
+         UIImageView(frame: CGRect(x: 0, y: 20, width: 320, height: 320))
         imageView.image = UIImage(named: "manutdLogo.png")
-        self.view.insertSubview(imageView, atIndex: 0)
+        self.view.insertSubview(imageView, at: 0)
         
-        if (defaults.boolForKey(SettingsViewController.WOW_THEME_SELECTED_KEY)) {
-            self.view.backgroundColor = UIColor.redColor().colorWithAlphaComponent(0.9);
+        if (defaults.bool(forKey: SettingsViewController.WOW_THEME_SELECTED_KEY)) {
+            self.view.backgroundColor = UIColor.red.withAlphaComponent(0.9);
             
             imageView.clipsToBounds = true
-            imageView.contentMode = UIViewContentMode.ScaleAspectFit
+            imageView.contentMode = UIViewContentMode.scaleAspectFit
         } else {
-            self.view.backgroundColor = UIColor.whiteColor();
+            self.view.backgroundColor = UIColor.white;
             imageView.removeFromSuperview()
         }
         
-        let intValue = defaults.integerForKey(SettingsViewController.DEFAULT_VALUE_KEY);
+        let intValue = defaults.integer(forKey: SettingsViewController.DEFAULT_VALUE_KEY);
         
         tipSelector.selectedSegmentIndex = intValue;
     }
@@ -61,23 +61,23 @@ class ViewController: UIViewController {
     }
 
 
-    @IBAction func dismissKeyboard(sender: AnyObject) {
+    @IBAction func dismissKeyboard(_ sender: AnyObject) {
         view.endEditing(true)
     }
     
     
-    @IBAction func onAmountChanged(sender: AnyObject) {
+    @IBAction func onAmountChanged(_ sender: AnyObject) {
         if (tipSelector.selectedSegmentIndex >= 0) {
             if (tipSelector.selectedSegmentIndex == 3) {
                 
-                tipTextBox.hidden = false
-                tipLabel.hidden = true
+                tipTextBox.isHidden = false
+                tipLabel.isHidden = true
                 tipTextBox.text = String.init(format: "%.2f", existingTip);
                 tipTextBox.becomeFirstResponder()
                 return
             } else {
-                tipTextBox.hidden = true
-                tipLabel.hidden = false
+                tipTextBox.isHidden = true
+                tipLabel.isHidden = false
                 billLabel.becomeFirstResponder()
                 
             }
@@ -93,7 +93,7 @@ class ViewController: UIViewController {
         }
         
     }
-    @IBAction func onTipEntered(sender: AnyObject) {
+    @IBAction func onTipEntered(_ sender: AnyObject) {
         
         let bill = Double(billLabel.text!) ?? 0
         

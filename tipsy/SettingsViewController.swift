@@ -15,33 +15,33 @@ class SettingsViewController: UIViewController {
      static let WOW_THEME_SELECTED_KEY = "theme_selected_key";
     @IBOutlet weak var themeSwitcher: UISwitch!
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let intValue = defaults.integerForKey(SettingsViewController.DEFAULT_VALUE_KEY);
+        let defaults = UserDefaults.standard
+        let intValue = defaults.integer(forKey: SettingsViewController.DEFAULT_VALUE_KEY);
         
         defaultTipSelector.selectedSegmentIndex = intValue;
         
-        themeSwitcher.on = defaults.boolForKey(SettingsViewController.WOW_THEME_SELECTED_KEY)
+        themeSwitcher.isOn = defaults.bool(forKey: SettingsViewController.WOW_THEME_SELECTED_KEY)
         
     }
     
-    @IBAction func onValueChange(sender: AnyObject) {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setInteger(defaultTipSelector.selectedSegmentIndex, forKey: SettingsViewController.DEFAULT_VALUE_KEY)
+    @IBAction func onValueChange(_ sender: AnyObject) {
+        let defaults = UserDefaults.standard
+        defaults.set(defaultTipSelector.selectedSegmentIndex, forKey: SettingsViewController.DEFAULT_VALUE_KEY)
         defaults.synchronize()
     }
     
-    @IBAction func onThemeChanged(sender: AnyObject) {
-        let defaults = NSUserDefaults.standardUserDefaults()
+    @IBAction func onThemeChanged(_ sender: AnyObject) {
+        let defaults = UserDefaults.standard
         
-        defaults.setBool(themeSwitcher.on, forKey: SettingsViewController.WOW_THEME_SELECTED_KEY)
+        defaults.set(themeSwitcher.isOn, forKey: SettingsViewController.WOW_THEME_SELECTED_KEY)
         defaults.synchronize()
         
     }
