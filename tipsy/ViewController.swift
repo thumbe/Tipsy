@@ -21,6 +21,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var amountLabel: UILabel!
     @IBOutlet weak var tipTextBox: UITextField!
     @IBOutlet weak var tipSelector: UISegmentedControl!
+
+    @IBOutlet weak var splitByLabel: UILabel!
+    @IBOutlet weak var splitByStepper: UIStepper!
+    @IBOutlet weak var splitByValueLabel: UILabel!
     
     var existingTip: Double = 0;
     var imageView: UIImageView = UIImageView(frame: CGRect(x: 0, y: 20, width: 320, height: 320));
@@ -28,7 +32,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         billLabel.becomeFirstResponder()
-        
+        splitByStepper.value = 2;
+        splitByLabel.text = "Split/" + "\(Int(splitByStepper.value))"
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -71,7 +76,7 @@ class ViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         // save current bill amount and time in miliseconds
         UserDefaults.standard.set(billLabel.text, forKey: ViewController.PREVIOUS_BILL_AMOUNT_KEY)
-        print("viewWillDisappear: "+String(NSDate().timeIntervalSince1970))
+        
         UserDefaults.standard.set(NSDate().timeIntervalSince1970 * 1000, forKey: ViewController.PREVIOUS_BILL_AMOUNT_TIME_KEY)
         UserDefaults.standard.synchronize()
     }
@@ -86,6 +91,22 @@ class ViewController: UIViewController {
         view.endEditing(true)
     }
     
+    @IBAction func onPercentageChanged(_ sender: AnyObject) {
+        
+        // Experimenting with UI animation
+        let bounds = tipSelector.bounds
+        UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.2, initialSpringVelocity: 10, options: UIViewAnimationOptions(), animations: {
+
+            self.tipSelector.bounds = CGRect(x: bounds.origin.x - 20, y: bounds.origin.y, width: bounds.size.width + 60, height: bounds.size.height)
+            self.tipSelector.isEnabled = false
+
+            }, completion: nil)
+            
+        self.tipSelector.isEnabled = true
+        self.tipSelector.bounds = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: bounds.size.width, height: bounds.size.height)
+
+        onAmountChanged(tipSelector);
+    }
     
     @IBAction func onAmountChanged(_ sender: AnyObject) {
         if (tipSelector.selectedSegmentIndex >= 0) {
@@ -108,9 +129,11 @@ class ViewController: UIViewController {
         let tip = bill * tipValues[tipSelector.selectedSegmentIndex];
             existingTip = tip;
         let total = bill + tip;
-        
+            
+        splitByLabel.text = "Split/" + "\(Int(splitByStepper.value))"
         tipLabel.text = String.init(format: "$%.2f", tip)
         amountLabel.text = String.init(format: "$%.2f", total)
+        splitByValueLabel.text = String.init(format: "$%.2f", total/splitByStepper.value)
             
         }
         
